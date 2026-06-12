@@ -3,14 +3,14 @@
 #include <QFile>
 #include <QDebug>
 #include <QFileInfo>
-#include <exiv2/exiv2.hpp>
 
 ImageSizeChecker::ImageSizeChecker(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ImageSizeChecker)
 {
     ui->setupUi(this);
-    connect(ui->pushButton,&QPushButton::clicked,this,&ImageSizeChecker::CreateFileFromPath);
+    connect(ui->getDim,&QPushButton::clicked,this,&ImageSizeChecker::CreateFileFromPath);
+    connect(ui->move,&QPushButton::clicked,this,&ImageSizeChecker::moveToNewFolder);
 }
 
 ImageSizeChecker::~ImageSizeChecker()
@@ -20,30 +20,46 @@ ImageSizeChecker::~ImageSizeChecker()
 
 bool ImageSizeChecker::CreateFileFromPath()
 {
-    QString path = ui->lineEdit->text();
+    QString path = ui->origPath->text();
+    QFile file(path); // unified button handler and subfunct?
+    qDebug()<<file.exists();
+    QImage image; //This works, memory efficiency time.
+    image.load(path);
+    QString strMaxHeight = ui->maxHeight->text();
+    QString strMaxWidth = ui->maxWidth->text();
+    int maxHeight = strMaxHeight.toInt();
+    int maxWidth = strMaxWidth.toInt();
+    if (maxHeight > image.height() && maxWidth > image.width()){
+        qDebug()<<"Image is too small.";
+        file.moveToTrash(); //If this works...
+    }
+    qDebug()<<"Height:"<<image.height();
+    qDebug()<<"Width:"<<image.width();
+    return true;
+}
+
+bool ImageSizeChecker::moveToNewFolder()
+{
+    QString path = ui->origPath->text();
     QFile file(path);
     qDebug()<<file.exists();
-    if(file.open(QIODevice::ReadWrite|QIODevice::Text)){
+    QFileInfo fname(file);
+    if(file.open(QIODevice::ReadWrite)){
         qDebug()<<"Create "<<path<<" Success!";
+        qDebug()<<fname.fileName();
     }
     else{
         qDebug()<<"Create "<<path<<" Failed!";
         return false;
     }
-    qDebug()<<"progress1";
-    QByteArray stringBA = path.toLocal8Bit();
-    const char* stdPath = stringBA.data();
-    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(stdPath);
-    qDebug()<<"progress2";
-    image->readMetadata();
-    Exiv2::ExifData& exifData = image->exifData();
-    qDebug()<<"progress3";
-    auto exifWidth = exifData.findKey(Exiv2::ExifKey("Exif.Image.ImageWidth"));
-    qDebug()<<"progress4";
-    //qDebug()<<exifWidth;
-    auto exifWidth2 = exifWidth->key(); //Breaks here.
-    //exifWidth2.element_type;
-    //QString strWidth = exifWidth2.toString();
-    qDebug()<<exifWidth2;
+    //QImage image(path);
+    //QString
+    //image.height();
+    //qDebug()<<"Width:"<<image.width();
+    QString newpath = ui->newPath->text();
+    newpath.append("/");
+    newpath.append(fname.fileName());
+    file.rename(path,newpath);
+    file.close();
     return true;
 }

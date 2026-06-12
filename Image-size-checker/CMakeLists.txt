@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.19)
 project(Image-size-checker LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
-find_package(exiv2 REQUIRED CONFIG NAMES exiv2)
 
 qt_standard_project_setup()
 
@@ -18,7 +17,6 @@ target_link_libraries(Image-size-checker
     PRIVATE
         Qt::Core
         Qt::Widgets
-        exiv2lib
 )
 
 install(TARGETS Image-size-checker

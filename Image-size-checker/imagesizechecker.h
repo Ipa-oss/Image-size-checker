@@ -20,5 +20,6 @@ public:
 private:
     Ui::ImageSizeChecker *ui;
     bool CreateFileFromPath();
+    bool moveToNewFolder();
 };
 #endif // IMAGESIZECHECKER_H
