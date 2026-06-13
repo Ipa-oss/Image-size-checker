@@ -19,7 +19,12 @@ public:
 
 private:
     Ui::ImageSizeChecker *ui;
-    bool CreateFileFromPath();
-    bool moveToNewFolder();
+    bool imageSizeConfirmation();
+    QImage image;
+    QString path = "";
+    QString strMaxHeight = "";
+    QString strMaxWidth = "";
+    int maxHeight = 0;
+    int maxWidth = 0;
 };
 #endif // IMAGESIZECHECKER_H
