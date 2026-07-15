@@ -2,7 +2,6 @@
 #include "ui_imagesizechecker.h"
 #include <QFile>
 #include <QDebug>
-#include <QFileInfo>
 
 ImageSizeChecker::ImageSizeChecker(QWidget *parent)
     : QMainWindow(parent)
@@ -10,6 +9,7 @@ ImageSizeChecker::ImageSizeChecker(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->getDim,&QPushButton::clicked,this,&ImageSizeChecker::imageSizeConfirmation);
+    connect(ui->pathButton,&QPushButton::clicked,this,&ImageSizeChecker::getPath);
 }
 
 ImageSizeChecker::~ImageSizeChecker()
@@ -20,7 +20,7 @@ ImageSizeChecker::~ImageSizeChecker()
 bool ImageSizeChecker::imageSizeConfirmation()
 {
     path = ui->origPath->text();
-    QFile file(path); // unified button handler and subfunct?
+    QFile file(path); // unified button handler and subfunct? //what?
     if (!file.exists()){
         qDebug()<<"File not found.";
         ui->statusLabel->setText("File not found.");
@@ -42,4 +42,15 @@ bool ImageSizeChecker::imageSizeConfirmation()
         ui->statusLabel->setText("Image is big enough.");
     }
     return true;
+}
+
+void ImageSizeChecker::getPath()
+{
+    ui->origPath->setText(fileWindow.getOpenFileName(nullptr, "Open image", "", "Image files (*.png *.jpg *.jpeg *.webp *.gif *.bmp)")); //Uncanny how well this works
+    //Hope we can do videos too at some point.
+    /* List of tested formats:
+    .png
+    .jpg
+
+    */
 }

@@ -2,6 +2,7 @@
 #define IMAGESIZECHECKER_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,7 +21,9 @@ public:
 private:
     Ui::ImageSizeChecker *ui;
     bool imageSizeConfirmation();
+    void getPath();
     QImage image;
+    QFileDialog fileWindow;
     QString path = "";
     QString strMaxHeight = "";
     QString strMaxWidth = "";

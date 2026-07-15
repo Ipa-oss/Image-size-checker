@@ -11,6 +11,7 @@ qt_add_executable(Image-size-checker
     imagesizechecker.cpp
     imagesizechecker.h
     imagesizechecker.ui
+
 )
 
 target_link_libraries(Image-size-checker
