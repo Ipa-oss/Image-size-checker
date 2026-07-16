@@ -1,5 +1,6 @@
 #include "imagesizechecker.h"
 #include "ui_imagesizechecker.h"
+
 #include <QFile>
 #include <QDebug>
 
@@ -46,11 +47,13 @@ bool ImageSizeChecker::imageSizeConfirmation()
 
 void ImageSizeChecker::getPath()
 {
-    ui->origPath->setText(fileWindow.getOpenFileName(nullptr, "Open image", "", "Image files (*.png *.jpg *.jpeg *.webp *.gif *.bmp)")); //Uncanny how well this works
-    //Hope we can do videos too at some point.
+    ui->origPath->setText(fileWindow.getOpenFileName(nullptr, "Open image", "", "Image files (*.png *.jpg *.jpeg *.gif *.bmp)")); //Uncanny how well this works
     /* List of tested formats:
     .png
     .jpg
+    .jpeg
+    .gif
+    .bmp
 
     */
 }
