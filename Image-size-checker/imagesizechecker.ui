@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>393</width>
     <height>176</height>
    </rect>
   </property>
@@ -25,12 +25,12 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="origPath"/>
+       <widget class="QLineEdit" name="fetchedPath"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pathButton">
+       <widget class="QPushButton" name="dirButton">
         <property name="text">
-         <string>Select file</string>
+         <string>Select directory</string>
         </property>
        </widget>
       </item>
@@ -51,29 +51,29 @@
       <item>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="1">
-         <widget class="QLineEdit" name="maxWidth"/>
+         <widget class="QLineEdit" name="minWidth"/>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="maxHeight"/>
+         <widget class="QLineEdit" name="minHeight"/>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Max width</string>
+           <string>Min width</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string> Max height</string>
+           <string>Min height</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="getDim">
+       <widget class="QPushButton" name="startButton">
         <property name="text">
          <string>Start</string>
         </property>
@@ -88,7 +88,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>399</width>
+     <width>393</width>
      <height>22</height>
     </rect>
    </property>

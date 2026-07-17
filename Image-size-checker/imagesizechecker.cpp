@@ -1,7 +1,6 @@
 #include "imagesizechecker.h"
 #include "ui_imagesizechecker.h"
 
-#include <QFile>
 #include <QDebug>
 
 ImageSizeChecker::ImageSizeChecker(QWidget *parent)
@@ -9,8 +8,8 @@ ImageSizeChecker::ImageSizeChecker(QWidget *parent)
     , ui(new Ui::ImageSizeChecker)
 {
     ui->setupUi(this);
-    connect(ui->getDim,&QPushButton::clicked,this,&ImageSizeChecker::imageSizeConfirmation);
-    connect(ui->pathButton,&QPushButton::clicked,this,&ImageSizeChecker::getPath);
+    connect(ui->dirButton,&QPushButton::clicked,this,&ImageSizeChecker::getPath);
+    connect(ui->startButton,&QPushButton::clicked,this,&ImageSizeChecker::getFilesInDir);
 }
 
 ImageSizeChecker::~ImageSizeChecker()
@@ -18,36 +17,34 @@ ImageSizeChecker::~ImageSizeChecker()
     delete ui;
 }
 
-bool ImageSizeChecker::imageSizeConfirmation()
+bool ImageSizeChecker::imageSizeConfirmation(QString recievedPath)
 {
-    path = ui->origPath->text();
-    QFile file(path); // unified button handler and subfunct? //what?
+    imagePath = recievedPath;
+    QFile file(imagePath); // unified button handler and subfunct? //what?
     if (!file.exists()){
         qDebug()<<"File not found.";
         ui->statusLabel->setText("File not found.");
         return false;
     }
-    image.load(path);
-    strMaxHeight = ui->maxHeight->text();
-    strMaxWidth = ui->maxWidth->text();
-    maxHeight = strMaxHeight.toInt();
-    maxWidth = strMaxWidth.toInt();
+    image.load(imagePath);
+    strMinHeight = ui->minHeight->text();
+    strMinWidth = ui->minWidth->text();
+    minHeight = strMinHeight.toInt();
+    minWidth = strMinWidth.toInt();
     qDebug()<<"Height:"<<image.height();
     qDebug()<<"Width:"<<image.width();
-    if (maxHeight > image.height() && maxWidth > image.width()){
+    if (minHeight > image.height() && minWidth > image.width()){
         qDebug()<<"Image is too small.";
-        ui->statusLabel->setText("Image is too small.");
         file.moveToTrash();
     }else{
         qDebug()<<"Image is big enough.";
-        ui->statusLabel->setText("Image is big enough.");
     }
     return true;
 }
 
 void ImageSizeChecker::getPath()
 {
-    ui->origPath->setText(fileWindow.getOpenFileName(nullptr, "Open image", "", "Image files (*.png *.jpg *.jpeg *.gif *.bmp)")); //Uncanny how well this works
+    ui->fetchedPath->setText(fileWindow.getExistingDirectory(nullptr, "Use directory", "", QFileDialog::ShowDirsOnly)); //Uncanny how well this works
     /* List of tested formats:
     .png
     .jpg
@@ -56,4 +53,15 @@ void ImageSizeChecker::getPath()
     .bmp
 
     */
+}
+
+void ImageSizeChecker::getFilesInDir()
+{
+    ui->statusLabel->setText("Status: WORKING DO NOT CLOSE!"); //This doesn't have time to write lmao.
+    QWidget::repaint();
+    path = ui->fetchedPath->text();
+    for (QDirListing::DirEntry dirEntry : QDirListing(path, QStringList{"*.png","*.jpg","*.jpeg","*.gif","*.bmp"}, QDirListing::IteratorFlag::FilesOnly)){
+        imageSizeConfirmation(dirEntry.filePath());
+    }
+    ui->statusLabel->setText("Status: Finished! Check your trash.");
 }

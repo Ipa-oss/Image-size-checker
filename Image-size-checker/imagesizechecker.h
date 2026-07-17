@@ -20,14 +20,16 @@ public:
 
 private:
     Ui::ImageSizeChecker *ui;
-    bool imageSizeConfirmation();
+    bool imageSizeConfirmation(QString);
     void getPath();
+    void getFilesInDir();
     QImage image;
     QFileDialog fileWindow;
-    QString path = "";
-    QString strMaxHeight = "";
-    QString strMaxWidth = "";
-    int maxHeight = 0;
-    int maxWidth = 0;
+    QString path;
+    QString imagePath = "";
+    QString strMinHeight = "";
+    QString strMinWidth = "";
+    int minHeight = 0;
+    int minWidth = 0;
 };
 #endif // IMAGESIZECHECKER_H
