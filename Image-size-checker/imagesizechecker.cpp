@@ -1,3 +1,12 @@
+/* List of tested formats:
+.png
+.jpg
+.jpeg
+.gif
+.bmp
+
+*/
+
 #include "imagesizechecker.h"
 #include "ui_imagesizechecker.h"
 
@@ -17,23 +26,17 @@ ImageSizeChecker::~ImageSizeChecker()
     delete ui;
 }
 
-bool ImageSizeChecker::imageSizeConfirmation(QString recievedPath)
+bool ImageSizeChecker::imageSizeConfirmation(QString imagePath, int recievedWidth, int recievedHeight)
 {
-    imagePath = recievedPath;
     QFile file(imagePath); // unified button handler and subfunct? //what?
     if (!file.exists()){
         qDebug()<<"File not found.";
-        ui->statusLabel->setText("File not found.");
         return false;
     }
     image.load(imagePath);
-    strMinHeight = ui->minHeight->text();
-    strMinWidth = ui->minWidth->text();
-    minHeight = strMinHeight.toInt();
-    minWidth = strMinWidth.toInt();
     qDebug()<<"Height:"<<image.height();
     qDebug()<<"Width:"<<image.width();
-    if (minHeight > image.height() && minWidth > image.width()){
+    if (recievedHeight > image.height() && recievedWidth > image.width()){
         qDebug()<<"Image is too small.";
         file.moveToTrash();
     }else{
@@ -45,14 +48,6 @@ bool ImageSizeChecker::imageSizeConfirmation(QString recievedPath)
 void ImageSizeChecker::getPath()
 {
     ui->fetchedPath->setText(fileWindow.getExistingDirectory(nullptr, "Use directory", "", QFileDialog::ShowDirsOnly)); //Uncanny how well this works
-    /* List of tested formats:
-    .png
-    .jpg
-    .jpeg
-    .gif
-    .bmp
-
-    */
 }
 
 void ImageSizeChecker::getFilesInDir()
@@ -60,8 +55,12 @@ void ImageSizeChecker::getFilesInDir()
     ui->statusLabel->setText("Status: WORKING DO NOT CLOSE!"); //This doesn't have time to write lmao.
     QWidget::repaint();
     path = ui->fetchedPath->text();
+    strMinHeight = ui->minHeight->text();
+    strMinWidth = ui->minWidth->text();
+    minHeight = strMinHeight.toInt();
+    minWidth = strMinWidth.toInt();
     for (QDirListing::DirEntry dirEntry : QDirListing(path, QStringList{"*.png","*.jpg","*.jpeg","*.gif","*.bmp"}, QDirListing::IteratorFlag::FilesOnly)){
-        imageSizeConfirmation(dirEntry.filePath());
+        imageSizeConfirmation(dirEntry.filePath(), minWidth, minHeight);
     }
     ui->statusLabel->setText("Status: Finished! Check your trash.");
 }
